@@ -1,0 +1,25 @@
+#! /bin/sh
+
+Brightness=$(xbacklight -get | awk '{print int ($1)}')
+if [ $Brightness -lt 2 ]
+then
+    Offset=$Brightness
+else
+    Offset=2
+fi
+Brigbar=$(( ($Brightness * 130 / 100) - $Offset ))
+
+if [ $Brightness -le 25 ]
+then
+    Sym=""
+elif [ $Brightness -le 50 ]
+then
+    Sym=""
+elif [ $Brightness -le 75 ]
+then
+    Sym=""
+else
+    Sym=""
+fi
+
+echo "$Sym $Brightness ^c#446688^^r0,6,$(( $Brigbar + $Offset )),6^^r1,5,$Brigbar,8^^f130^^d^"

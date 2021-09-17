@@ -1,0 +1,61 @@
+#! /bin/sh
+
+VolLev=$(pulsemixer --get-volume | awk '{print int($1)}');
+VolMute=$(pulsemixer --get-mute)
+
+if [ $VolLev -eq 0 ]
+then
+    VolNorm=0
+    VolYel=0
+    VolRed=0
+    OffNorm=0
+    OffYel=0
+    OffRed=0
+elif [ $VolLev -le 75 ]
+then
+    VolNorm=$(( $VolLev - 2 ))
+    VolYel=0
+    VolRed=0
+    OffNorm=2
+    OffYel=0
+    OffRed=0
+    Col="^c#557799^"
+elif [ $VolLev -le 120 ]
+then
+    VolNorm=73
+    VolYel=$(( $VolLev - 78 ))
+    VolRed=0
+    OffNorm=1
+    OffYel=1
+    OffRed=0
+    Col="^c#ddaa55^"
+else
+    VolNorm=73
+    VolYel=42
+    VolRed=$(( $VolLev - 122 ))
+    OffNorm=1
+    OffYel=0
+    OffRed=1
+    Col="^c#aa3355^"
+fi
+
+if [ $VolLev -eq 0 ]
+then
+    Ind="ﱝ"
+elif [ $VolLev -le 25 ]
+then
+    Ind="奄"
+elif [ $VolLev -le 75 ]
+then
+    Ind="奔"
+else
+    Ind="墳"
+fi
+
+if [ $VolMute -eq 1 ]
+then
+	Ind="^c#557799^ﱝ"
+fi
+
+echo  "$Col$Ind ^d^$VolLev ^c#446688^^r0,6,$VolNorm,6^^r1,5,$(($VolNorm - $OffNorm)),8^^c#ddaa55^^r77,6,$VolYel,6^^r77,5,$(($VolYel - $OffYel)),8^^c#aa3355^^r123,6,$VolRed,6^^r123,5,$(($VolRed - $OffRed)),8^^d^^f151^"
+

@@ -1,0 +1,27 @@
+#! /bin/sh
+Charge=$(acpi | grep "Battery 0" | awk '{print $3}' | sed 's/,//g')
+BatLev=$(acpi | grep "Battery 0" | awk '{print int($4)}')
+
+BatH=$(( $BatLev * 13 / 100 ))
+BatY=$(( 16 - $BatH ))
+
+if [ $BatLev -le 15 ]
+then
+    BatColor="c#dd0000"
+elif [ $BatLev -le 40 ]
+then
+    BatColor="c#ffaa00"
+else
+    BatColor="d"
+fi
+
+if [ $Charge = "Discharging" ]
+then
+    Icon=" "
+else
+    Icon="ﮣ"
+    BatColor="c#66cc00"
+fi
+
+echo  "^c#ddcc00^$Icon^c#ccddee^^r0,0,4,2^^r-3,2,10,15^^c#000000^^r-2,3,8,13^^$BatColor^^r-2,$BatY,8,$BatH^^d^^f13^$BatLev%"
+

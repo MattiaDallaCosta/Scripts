@@ -1,0 +1,3 @@
+#!/bin/sh
+
+wmctrl -a $(wmctrl -lx | grep $1 | awk '{print $5}')
